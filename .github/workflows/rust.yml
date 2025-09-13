@@ -63,7 +63,7 @@ jobs:
           save-if: ${{ github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/') }}
 
       - name: Build release (locked)
-        run: cargo build --release --locked --verbose
+        run: cargo build --release --verbose
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
