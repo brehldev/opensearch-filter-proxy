@@ -11,7 +11,18 @@ pub async fn handle_search(
     Path(index): Path<String>,
     Json(payload): Json<Value>,
 ) -> Json<Value> {
-    match state.opensearch_repo.search(&index, payload).await {
+
+    // For demonstration, we use a fake filter. In a real application,
+    // this would be another api call or derived from user context.
+    let fake_filter = serde_json::json!({ "term": { "genre.keyword": "Sci-Fi" } });
+
+    let query_with_security_filter = state.security_filter_service.apply(payload, fake_filter);
+
+    match state
+        .opensearch_repo
+        .search(&index, query_with_security_filter)
+        .await
+    {
         Ok(result) => Json(result),
         Err(e) => {
             eprintln!("Search error: {}", e);
