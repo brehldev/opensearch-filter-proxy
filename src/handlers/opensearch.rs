@@ -11,7 +11,6 @@ pub async fn handle_search(
     Path(index): Path<String>,
     Json(payload): Json<Value>,
 ) -> Json<Value> {
-
     // For demonstration, we use a fake filter. In a real application,
     // this would be another api call or derived from user context.
     let fake_filter = serde_json::json!({ "term": { "genre.keyword": "Sci-Fi" } });
