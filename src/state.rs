@@ -1,3 +1,4 @@
+use crate::handlers::security_filter::SecurityFilterService;
 use crate::{
     config::Config,
     repositories::{opensearch::OpenSearchRepository, proxy::ProxyRepository},
@@ -10,12 +11,16 @@ use crate::{
 #[derive(Clone)]
 pub struct OpenSearchRouterState {
     pub(crate) opensearch_repo: OpenSearchRepository,
+    pub(crate) security_filter_service: SecurityFilterService,
 }
 
 impl OpenSearchRouterState {
     pub fn new(config: &Config) -> Self {
         let opensearch_repo = OpenSearchRepository::new(config);
-        Self { opensearch_repo }
+        Self {
+            opensearch_repo,
+            security_filter_service: SecurityFilterService::new(),
+        }
     }
 }
 

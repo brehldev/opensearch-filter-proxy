@@ -1,0 +1,11 @@
+curl -X POST "http://localhost:3000/movies/_search" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": {
+      "bool": {
+        "filter": [
+          { "range": { "year": { "gte": 2020 } } }
+        ]
+      }
+    }
+  }'
