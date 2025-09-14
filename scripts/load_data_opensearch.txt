@@ -1,0 +1,3 @@
+curl -X POST "http://localhost:9200/_bulk" \
+  -H "Content-Type: application/x-ndjson" \
+  --data-binary "@bulk.ndjson"

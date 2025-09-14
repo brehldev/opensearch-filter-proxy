@@ -8,13 +8,24 @@ services:
       - OPENSEARCH_INITIAL_ADMIN_PASSWORD=123849password!P
     ports:
       - "9200:9200"
+    networks:
+      - proxy
 
   opensearch-filter-proxy:
     image: opensearch-filter-proxy:latest
     build:
       context: .
       dockerfile: Dockerfile
-    env_file:
-      - ./.env.example
+    environment:
+      OPENSEARCH_URL: http://opensearch:9200
+      RUST_LOG: info
+      REVERSE_PROXY_PREFIX: /proxy
+      REVERSE_PROXY_BANNED_QUERY_PARAMS: q,query
+      REVERSE_PROXY_TARGET_URL: http://opensearch:9200
     ports:
         - "3000:3000"
+    networks:
+      - proxy
+
+networks:
+  proxy:
