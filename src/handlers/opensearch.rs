@@ -13,9 +13,9 @@ pub async fn handle_search(
 ) -> Json<Value> {
     // For demonstration, we use a fake filter. In a real application,
     // this would be another api call or derived from user context.
-    let fake_filter = serde_json::json!({ "term": { "genre.keyword": "Sci-Fi" } });
+    let fake_filter = state.filter_repository.get_filter();
 
-    let query_with_security_filter = state.security_filter_service.apply(payload, fake_filter);
+    let query_with_security_filter = state.security_filter_service.apply(payload, fake_filter.0);
 
     match state
         .opensearch_repo
