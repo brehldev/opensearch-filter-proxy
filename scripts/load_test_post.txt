@@ -1,0 +1,4 @@
+hey -m POST \
+  -H "Content-Type: application/json" \
+  -d '{"query": {"match_all": {}}}' \
+  http://localhost:3000/movies/_search
