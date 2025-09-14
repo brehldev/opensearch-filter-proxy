@@ -11,7 +11,7 @@ use serde_json::Value;
 pub struct FilterRepository {}
 
 impl FilterRepository {
-    pub fn new(config: &Config) -> Self {
+    pub fn new(_config: &Config) -> Self {
         Self {}
     }
 
