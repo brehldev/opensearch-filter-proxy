@@ -4,15 +4,9 @@ use serde::Deserialize;
 ///
 /// # Fields
 /// - `opensearch_url` - OpenSearch instance URL (OPENSEARCH_URL)
-/// - `reverse_proxy_target_url` - Reverse proxy target URL (REVERSE_PROXY_TARGET_URL)
-/// - `reverse_proxy_prefix` - Reverse proxy prefix (REVERSE_PROXY_PREFIX)
-/// - `reverse_proxy_banned_query_params` - Optional banned query parameters (REVERSE_PROXY_BANNED_QUERY_PARAMS)
 #[derive(Debug, Clone, Deserialize)]
 pub struct Config {
-    pub opensearch_url: String,           // OPENSEARCH_URL
-    pub reverse_proxy_target_url: String, // REVERSE_PROXY_TARGET_URL
-    pub reverse_proxy_prefix: String,     // REVERSE_PROXY_PREFIX
-    pub reverse_proxy_banned_query_params: Option<Vec<String>>, // REVERSE_PROXY_BANNED_QUERY_PARAMS
+    pub opensearch_url: String, // OPENSEARCH_URL
 }
 
 impl Config {

@@ -2,33 +2,27 @@ use std::collections::HashMap;
 
 use axum::{
     Json,
-    extract::{Path, Query, State},
-};
-use serde_json::Value;
-
-use crate::{
-    state::ProxyRouterState,
-    utils::{is_banned_path, is_banned_query_param},
+    extract::{Request, State},
+    response::IntoResponse,
 };
 
-pub async fn proxy_handler(
-    State(state): State<ProxyRouterState>,
-    Path(path): Path<String>,
-    Query(params): Query<HashMap<String, String>>,
-) -> Json<Value> {
-    if is_banned_path(&path) {
-        return Json(serde_json::json!({"error": "Access to this path is banned"}));
-    }
+use crate::state::OpenSearchRouterState;
 
-    if is_banned_query_param(&params, &state.config.reverse_proxy_banned_query_params) {
-        return Json(serde_json::json!({"error": "Access to this query parameter is banned"}));
-    }
+pub async fn generic_get_proxy_handler(
+    State(state): State<OpenSearchRouterState>,
+    request: Request,
+) -> impl IntoResponse {
+    let path = request.uri().path();
 
-    match state.proxy_repo.proxy_get_request(&path).await {
-        Ok(response) => Json(response),
+    match state
+        .proxy_repo
+        .get(path, &HashMap::new())
+        .await
+    {
+        Ok(response) => Json(response).into_response(),
         Err(e) => {
             eprintln!("Proxy error: {}", e);
-            Json(serde_json::json!({"error": e.to_string()}))
+            Json(serde_json::json!({"error": e.to_string()})).into_response()
         }
     }
 }

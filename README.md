@@ -33,12 +33,21 @@ The proxy can be configured using the following environment variables:
 
 | Variable                         | Default                | Description                                                                |
 |----------------------------------|------------------------|----------------------------------------------------------------------------|
-| `REVERSE_PROXY_TARGET_URL`       | `http://localhost:9200` | The target OpenSearch instance the proxy forwards requests to.             |
 | `OPENSEARCH_URL`                 | `http://localhost:9200` | Base URL of the OpenSearch server (used internally by the proxy).          |
-| `REVERSE_PROXY_BANNED_QUERY_PARAMS` | `q,query`             | Comma-separated list of query parameters that should be blocked.|
-| `REVERSE_PROXY_PREFIX`           | `/proxy`                | URL prefix for routing proxied requests.                                   |
 | `RUST_LOG`                       | `info`                  | Log level for the proxy (`error`, `warn`, `info`, `debug`, `trace`).       |
 
+
+## Supported Endpoints
+
+The following section describes the [OpenSearch API](https://docs.opensearch.org/latest/api-reference/) endpoints supported by the proxy.
+The proxy uses a deny-all approach, meaning only explicitly allowed endpoints are accessible.
+
+
+The proxy currently supports the following OpenSearch endpoints:
+
+- `/{index}/_search` - POST
+- `/{index}/_msearch` - POST
+- `/_cluster/health` - GET
 
 ## Benchmark
 

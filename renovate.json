@@ -2,5 +2,9 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:best-practices"
-  ]
+  ],
+  "schedule": [
+    "before 7am on Tuesday"
+  ],
+  "timezone": "America/New_York"
 }

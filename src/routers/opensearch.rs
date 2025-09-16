@@ -1,11 +1,15 @@
-use axum::{Router, routing::post};
-
 use crate::{config::Config, handlers, state::OpenSearchRouterState};
+use axum::{
+    Router,
+    routing::{get, post},
+};
 
 pub fn create_router(config: &Config) -> Router {
-    let state = OpenSearchRouterState::new(config);
-
     Router::new()
+        .route(
+            "/_cluster/health",
+            get(handlers::proxy::generic_get_proxy_handler),
+        )
         .route(
             "/{index}/_search",
             post(handlers::opensearch::handle_search),
@@ -14,5 +18,5 @@ pub fn create_router(config: &Config) -> Router {
             "/{index}/_msearch",
             post(handlers::opensearch::handle_msearch),
         )
-        .with_state(state)
+        .with_state(OpenSearchRouterState::new(config))
 }
