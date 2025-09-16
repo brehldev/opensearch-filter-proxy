@@ -1,1 +1,1 @@
-hey http://localhost:3000/proxy/_cluster/health
+hey http://localhost:3000/_cluster/health

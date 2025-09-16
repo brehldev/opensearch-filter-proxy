@@ -1,9 +1,9 @@
-use crate::handlers::security_filter::SecurityFilterService;
 use crate::{
     config::Config,
     repositories::{
         filter::FilterRepository, opensearch::OpenSearchRepository, proxy::ProxyRepository,
     },
+    handlers::security_filter::SecurityFilterService
 };
 
 /// Shared state for OpenSearch-related routes.
@@ -20,9 +20,8 @@ pub struct OpenSearchRouterState {
 
 impl OpenSearchRouterState {
     pub fn new(config: &Config) -> Self {
-        let opensearch_repo = OpenSearchRepository::new(config);
         Self {
-            opensearch_repo,
+            opensearch_repo: OpenSearchRepository::new(config),
             security_filter_service: SecurityFilterService::new(),
             filter_repository: FilterRepository::new(config),
             proxy_repo: ProxyRepository::new(config),

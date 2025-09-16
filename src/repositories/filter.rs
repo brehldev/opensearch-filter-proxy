@@ -5,8 +5,9 @@ use serde_json::Value;
 /// A repository for managing filter logic and data retrieval.
 ///
 /// This serves as a template for building out your own filter logic, whether that's
-/// fetching from another API, loading from a file, or implementing custom business logic.
-/// The current implementation returns hardcoded JSON as an example.
+/// fetching from another API, loading from a file, or querying a database.
+/// The current implementation returns hardcoded JSON as an example. Business logic should live
+/// in the handler layer, while this repository focuses on data access.
 #[derive(Clone)]
 pub struct FilterRepository {}
 
