@@ -21,7 +21,14 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
+
 COPY --from=builder /app/target/release/opensearch-filter-proxy /usr/local/bin
+
+ARG USER_ID=1001
+ARG GROUP_ID=1001
+RUN groupadd -g ${GROUP_ID} nonrootgroup && useradd -r -u ${USER_ID} -g nonrootgroup nonrootuser
+
+USER nonrootuser
 
 EXPOSE 3000
 
