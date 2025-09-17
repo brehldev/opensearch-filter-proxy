@@ -1,8 +1,8 @@
 use axum::{
     Json,
     extract::{Path, State},
+    http::StatusCode,
     response::IntoResponse,
-    http::StatusCode
 };
 use serde_json::Value;
 
@@ -12,7 +12,7 @@ pub async fn handle_search(
     State(state): State<OpenSearchRouterState>,
     Path(index): Path<String>,
     Json(payload): Json<Value>,
-) -> impl IntoResponse{
+) -> impl IntoResponse {
     // For demonstration, we use a fake filter. In a real application,
     // this would be another api call or derived from user context.
     let fake_filter = state.filter_repository.get_filter();
@@ -29,8 +29,9 @@ pub async fn handle_search(
             eprintln!("Search error: {}", e);
             (
                 StatusCode::INTERNAL_SERVER_ERROR,
-                Json(serde_json::json!({"error": e.to_string()}))
-            ).into_response()
+                Json(serde_json::json!({"error": e.to_string()})),
+            )
+                .into_response()
         }
     }
 }
@@ -46,8 +47,25 @@ pub async fn handle_msearch(
             eprintln!("MSearch error: {}", e);
             (
                 StatusCode::INTERNAL_SERVER_ERROR,
-                Json(serde_json::json!({"error": e.to_string()}))
-            ).into_response()
+                Json(serde_json::json!({"error": e.to_string()})),
+            )
+                .into_response()
+        }
+    }
+}
+
+pub async fn handle_cluster_health(
+    State(state): State<OpenSearchRouterState>,
+) -> impl IntoResponse {
+    match state.opensearch_repo.cluster_health().await {
+        Ok(result) => Json(result).into_response(),
+        Err(e) => {
+            eprintln!("Cluster health error: {}", e);
+            (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                Json(serde_json::json!({"error": e.to_string()})),
+            )
+                .into_response()
         }
     }
 }
