@@ -1,5 +1,11 @@
 use serde_json::{Value, json};
 
+/// A service responsible for applying global filters to queries.
+///
+/// This service provides methods to modify and enhance queries with
+/// additional security filters. It ensures that the filters are properly
+/// integrated into the query structure, whether the query already contains
+/// a `bool` clause or not.
 #[derive(Clone)]
 pub struct SecurityFilterService;
 

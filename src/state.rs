@@ -1,9 +1,7 @@
-use crate::handlers::security_filter::SecurityFilterService;
 use crate::{
     config::Config,
-    repositories::{
-        filter::FilterRepository, opensearch::OpenSearchRepository, proxy::ProxyRepository,
-    },
+    handlers::security_filter::SecurityFilterService,
+    repositories::{filter::FilterRepository, opensearch::OpenSearchRepository},
 };
 
 /// Shared state for OpenSearch-related routes.
@@ -19,32 +17,10 @@ pub struct OpenSearchRouterState {
 
 impl OpenSearchRouterState {
     pub fn new(config: &Config) -> Self {
-        let opensearch_repo = OpenSearchRepository::new(config);
         Self {
-            opensearch_repo,
+            opensearch_repo: OpenSearchRepository::new(config),
             security_filter_service: SecurityFilterService::new(),
             filter_repository: FilterRepository::new(config),
-        }
-    }
-}
-
-/// Shared state for proxy-related routes.
-///
-/// This struct contains the repository instance that handlers can use
-/// to forward HTTP requests to a target URL.
-#[derive(Clone)]
-pub struct ProxyRouterState {
-    /// The repository responsible for proxying HTTP requests.
-    pub(crate) proxy_repo: ProxyRepository,
-    pub(crate) config: Config,
-}
-
-impl ProxyRouterState {
-    pub fn new(config: &Config) -> Self {
-        let proxy_repo = ProxyRepository::new(config);
-        Self {
-            config: config.clone(),
-            proxy_repo,
         }
     }
 }

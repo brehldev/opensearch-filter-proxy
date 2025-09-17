@@ -19,9 +19,6 @@ services:
     environment:
       OPENSEARCH_URL: http://opensearch:9200
       RUST_LOG: info
-      REVERSE_PROXY_PREFIX: /proxy
-      REVERSE_PROXY_BANNED_QUERY_PARAMS: q,query
-      REVERSE_PROXY_TARGET_URL: http://opensearch:9200
     ports:
         - "3000:3000"
     networks:

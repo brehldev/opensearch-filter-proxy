@@ -4,8 +4,6 @@ mod models;
 mod repositories;
 mod routers;
 mod state;
-mod utils;
-
 use axum::Router;
 use tokio::net::TcpListener;
 use tower_http::trace::TraceLayer;
@@ -30,7 +28,6 @@ async fn main() {
 
     let config = Config::from_env().expect("Failed to load configuration");
 
-    // build our application with all routes
     let app = app(&config);
 
     let listener = TcpListener::bind("0.0.0.0:3000").await.unwrap();
@@ -46,10 +43,6 @@ fn app(config: &Config) -> Router {
     let public_routes = routers::public::create_router().layer(TraceLayer::new_for_http());
     let opensearch_routes =
         routers::opensearch::create_router(config).layer(TraceLayer::new_for_http());
-    let proxy_routes = routers::proxy::create_router(config).layer(TraceLayer::new_for_http());
 
-    Router::new()
-        .merge(public_routes)
-        .merge(opensearch_routes)
-        .merge(proxy_routes)
+    Router::new().merge(public_routes).merge(opensearch_routes)
 }
