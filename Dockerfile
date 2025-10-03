@@ -1,4 +1,4 @@
-FROM lukemathwalker/cargo-chef:latest-rust-1 AS chef
+FROM lukemathwalker/cargo-chef:latest-rust-1@sha256:a01e128c11b3dbc1b896d2c0b85b463de2d0be43c01e26efe76c7ceec4312211 AS chef
 WORKDIR /app
 
 FROM chef AS planner
@@ -14,7 +14,7 @@ COPY . .
 RUN cargo build --release --bin opensearch-filter-proxy
 
 # We do not need the Rust toolchain to run the binary!
-FROM debian:bookworm-slim AS runtime
+FROM debian:bookworm-slim@sha256:7e490910eea2861b9664577a96b54ce68ea3e02ce7f51d89cb0103a6f9c386e0 AS runtime
 
 RUN apt-get update && apt-get install -y \
     ca-certificates \
