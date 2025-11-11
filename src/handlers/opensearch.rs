@@ -5,7 +5,9 @@ use axum::{
     response::IntoResponse,
 };
 use serde_json::Value;
+use tracing::{debug, error, instrument};
 
+use crate::body::ndjson::NdjsonBody;
 use crate::state::OpenSearchRouterState;
 
 pub async fn handle_search(
@@ -36,15 +38,26 @@ pub async fn handle_search(
     }
 }
 
+#[instrument(skip(state, ndjson_body), fields(index = %index, body_size = ndjson_body.0.len()))]
 pub async fn handle_msearch(
     State(state): State<OpenSearchRouterState>,
     Path(index): Path<String>,
-    Json(payload): Json<Value>,
+    ndjson_body: NdjsonBody,
 ) -> impl IntoResponse {
-    match state.opensearch_repo.msearch(&index, payload).await {
-        Ok(result) => Json(result).into_response(),
+    let NdjsonBody(ndjson_bytes) = ndjson_body;
+    debug!(
+        "Received msearch request for index '{}' with {} bytes of NDJSON data",
+        index,
+        ndjson_bytes.len()
+    );
+
+    match state.opensearch_repo.msearch(&index, ndjson_bytes).await {
+        Ok(result) => {
+            debug!("MSearch request successful for index '{}'", index);
+            Json(result).into_response()
+        }
         Err(e) => {
-            eprintln!("MSearch error: {}", e);
+            error!("MSearch error for index '{}': {}", index, e);
             (
                 StatusCode::INTERNAL_SERVER_ERROR,
                 Json(serde_json::json!({"error": e.to_string()})),
