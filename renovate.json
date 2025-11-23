@@ -3,8 +3,67 @@
   "extends": [
     "config:best-practices"
   ],
+  "lockFileMaintenance": {
+    "enabled": true
+  },
+  "packageRules": [
+    {
+      "automerge": true,
+      "description": "Automatically merges updates to the GitLab CI/CD configuration file.",
+      "groupName": "CI/CD",
+      "matchFileNames": [
+        ".github/workflows/rust.yml"
+      ]
+    },
+    {
+      "automerge": true,
+      "description": "Automatically merges non-major Rust crate updates from crates.io.",
+      "groupName": "non-major dependencies",
+      "matchManagers": [
+        "cargo"
+      ],
+      "matchDatasources": [
+        "crates"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin"
+      ]
+    },
+    {
+      "automerge": true,
+      "description": "Automatically updates development-related dependencies from crates.io",
+      "groupName": "dev dependencies",
+      "matchManagers": [
+        "cargo"
+      ],
+      "matchDatasources": [
+        "crates"
+      ],
+      "matchDepTypes": [
+        "devDependencies"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ]
+    },
+    {
+      "automerge": true,
+      "description": "Automatically updates Docker image digests to ensure images use the latest available builds.",
+      "groupName": "Docker digests",
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchUpdateTypes": [
+        "digest"
+      ]
+    }
+  ],
   "schedule": [
    "before 8am on Sunday"
   ],
-  "timezone": "America/New_York"
+  "timezone": "America/New_York",
+  "prConcurrentLimit": 8
 }
