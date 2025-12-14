@@ -14,7 +14,7 @@ COPY . .
 RUN cargo build --release --bin opensearch-filter-proxy
 
 # We do not need the Rust toolchain to run the binary!
-FROM debian:bookworm-slim@sha256:b4aa902587c2e61ce789849cb54c332b0400fe27b1ee33af4669e1f7e7c3e22f AS runtime
+FROM debian:bookworm-slim@sha256:e899040a73d36e2b36fa33216943539d9957cba8172b858097c2cabcdb20a3e2 AS runtime
 
 RUN apt-get update && apt-get install -y \
     ca-certificates \
